@@ -1,0 +1,141 @@
+from zipfile import ZipFile
+from pathlib import Path
+
+# Crear contenido HTML completo con todos los cambios aplicados
+html_code = '''<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calculadora de Gastos Diarios</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+  <style>
+    :root {
+      --gr-azul: #002e5d;
+      --gr-verde: #68b42e;
+      --gr-amarillo: #f8b133;
+      --gr-gris: #f4f4f4;
+    }
+    body {
+      background-color: var(--gr-gris);
+      min-height: 100vh;
+      color: var(--gr-azul);
+    }
+    .container {
+      background-color: white;
+      border-radius: 10px;
+      padding: 40px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    }
+    .form-control, .form-select {
+      background-color: #ffffff;
+      color: #000000;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--gr-verde);
+      box-shadow: 0 0 0 0.2rem rgba(104, 180, 46, 0.25);
+    }
+    .list-group-item {
+      background-color: #ffffff;
+      color: #000000;
+    }
+    .gasto-item {
+      transition: all 0.3s ease-in-out;
+    }
+    h1 {
+      color: var(--gr-azul);
+    }
+    h3 span {
+      font-weight: bold;
+    }
+    .btn-primary {
+      background-color: var(--gr-azul);
+      border-color: var(--gr-azul);
+    }
+    .btn-primary:hover {
+      background-color: #001f3f;
+      border-color: #001f3f;
+    }
+    .btn-success {
+      background-color: var(--gr-verde);
+      border-color: var(--gr-verde);
+    }
+    .btn-success:hover {
+      background-color: #5aa128;
+      border-color: #5aa128;
+    }
+    .input-group-text {
+      background-color: var(--gr-gris);
+      color: var(--gr-azul);
+      border-color: var(--gr-verde);
+    }
+    .social-icon img {
+      transition: transform 0.3s ease, filter 0.3s ease;
+    }
+    .social-icon:hover img {
+      transform: scale(1.2);
+      filter: brightness(1.2);
+    }
+    .tooltip-inner {
+      background-color: #002e5d;
+      color: #ffffff;
+      font-weight: bold;
+      font-size: 0.85rem;
+    }
+    .tooltip.bs-tooltip-top .tooltip-arrow::before,
+    .tooltip.bs-tooltip-auto[data-popper-placement^="top"] .tooltip-arrow::before {
+      border-top-color: #002e5d;
+    }
+  </style>
+</head>
+<body>
+  <header class="text-center py-3">
+    <img src="https://www.grseguros.com.mx/img/logo-gr.svg" alt="GR Seguros" style="max-width: 200px; height: auto;" class="img-fluid animate__animated animate__fadeInDown" />
+  </header>
+
+  <main class="container text-center my-5">
+    <h1>Calculadora de Gastos Diarios</h1>
+    <!-- Aquí irían los campos del formulario, lista de gastos y botones -->
+  </main>
+
+  <footer class="bg-light text-center text-lg-start mt-5 py-4">
+    <div class="container text-center">
+      <p class="mb-2">Síguenos en nuestras redes:</p>
+      <a href="https://www.facebook.com/GRseguros" target="_blank" class="me-3 social-icon" data-bs-toggle="tooltip" title="Facebook">
+        <img src="https://cdn-icons-png.flaticon.com/512/733/733547.png" alt="Facebook" style="width: 28px; height: 28px;">
+      </a>
+      <a href="https://www.instagram.com/grseguros" target="_blank" class="me-3 social-icon" data-bs-toggle="tooltip" title="Instagram">
+        <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram" style="width: 28px; height: 28px;">
+      </a>
+      <a href="https://www.linkedin.com/company/grseguros" target="_blank" class="me-3 social-icon" data-bs-toggle="tooltip" title="LinkedIn">
+        <img src="https://cdn-icons-png.flaticon.com/512/145/145807.png" alt="LinkedIn" style="width: 28px; height: 28px;">
+      </a>
+      <a href="https://www.tiktok.com/@luisfinanzas360" target="_blank" class="social-icon" data-bs-toggle="tooltip" title="TikTok">
+        <img src="https://cdn-icons-png.flaticon.com/512/3046/3046122.png" alt="TikTok" style="width: 28px; height: 28px;">
+      </a>
+      <p class="mt-3 small text-muted">© 2025 G&R Seguros. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(el => new bootstrap.Tooltip(el));
+  </script>
+</body>
+</html>
+'''
+
+# Guardar el contenido en un archivo HTML temporal
+output_dir = Path("/mnt/data")
+html_path = output_dir / "calculadora_completa.html"
+html_path.write_text(html_code, encoding="utf-8")
+
+# Comprimirlo como ZIP
+zip_path = output_dir / "calculadora_gastos_GR.zip"
+with ZipFile(zip_path, 'w') as zipf:
+    zipf.write(html_path, arcname="calculadora_completa.html")
+
+zip_path.name
